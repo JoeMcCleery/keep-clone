@@ -1,0 +1,79 @@
+{
+  "title": "note",
+  "version": 1,
+  "description": "Describes a note",
+  "primaryKey": "id",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "maxLength": 32,
+      "format": "uuid"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["simple", "todo"]
+    },
+    "title": {
+      "type": "string"
+    },
+    "content": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "completed": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false,
+        "required": ["text", "completed"]
+      }
+    },
+    "background": {
+      "type": "string",
+      "enum": [
+        "default",
+        "coral",
+        "peach",
+        "sand",
+        "mint",
+        "sage",
+        "fog",
+        "storm",
+        "dusk",
+        "blossom",
+        "clay",
+        "chalk"
+      ]
+    },
+    "labels": {
+      "type": "array",
+      "ref": "labels",
+      "items": {
+        "type": "string"
+      }
+    },
+    "pinned": {
+      "type": "boolean"
+    },
+    "archived": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "type",
+    "title",
+    "content",
+    "background",
+    "labels",
+    "pinned",
+    "archived"
+  ]
+}

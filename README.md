@@ -16,7 +16,9 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Acceptance Criteria
+## Specifications
+
+### Acceptance Criteria
 
 1. React based Application which has different routes (including fallback for it not found)
 2. Stateful components (ones with useState)
@@ -31,7 +33,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 - Add routes for:
   - All notes
-  - Reminders
   - Labels
   - Archive
 - Stateful components:
