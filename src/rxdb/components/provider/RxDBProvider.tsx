@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { Provider } from "rxdb-hooks";
-import { Database } from "../types";
-import initRxDB from "../";
+import { Database } from "@/rxdb/types";
+import initRxDB from "@/rxdb";
 
 let init = false;
 

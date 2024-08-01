@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
-import RxDBProvider from "@/rxdb/components/RxDBProvider";
+import RxDBProvider from "@/rxdb/components/provider/RxDBProvider";
+import MUIThemeProvider from "@/components/provider/MUIThemeProvider";
+import Header from "@/components/Header";
+import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
-import "./globals.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
+import "@/app/globals.css";
 
 export const metadata: Metadata = {
   title: "Keep Clone",
@@ -16,7 +21,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <RxDBProvider>{children}</RxDBProvider>
+        <RxDBProvider>
+          <MUIThemeProvider>
+            <Header />
+            {children}
+          </MUIThemeProvider>
+        </RxDBProvider>
       </body>
     </html>
   );

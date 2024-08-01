@@ -4,8 +4,8 @@ import {
   RxDatabase,
   RxCollectionCreator,
 } from "rxdb";
-import { Label } from "./generated/label";
-import { Note } from "./generated/note";
+import { Label } from "@/rxdb/types/generated/label";
+import { Note } from "@/rxdb/types/generated/note";
 
 export type LabelSchema = RxJsonSchema<Label>;
 

@@ -1,4 +1,4 @@
-import { addRxPlugin, createRxDatabase, RxCollectionCreator } from "rxdb";
+import { addRxPlugin, createRxDatabase } from "rxdb";
 import { RxDBDevModePlugin } from "rxdb/plugins/dev-mode";
 import { RxDBMigrationSchemaPlugin } from "rxdb/plugins/migration-schema";
 import { getRxStorageDexie } from "rxdb/plugins/storage-dexie";
@@ -7,9 +7,9 @@ import {
   DatabaseCollections,
   LabelSchema,
   NoteSchema,
-} from "./types";
-import labelSchema from "./schema/label.json";
-import noteSchema from "./schema/note.json";
+} from "@/rxdb/types";
+import labelSchema from "@/rxdb/schema/label.json";
+import noteSchema from "@/rxdb/schema/note.json";
 
 export default async function initRxDB() {
   // Add dev-mode plugins

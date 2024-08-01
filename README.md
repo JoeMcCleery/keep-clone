@@ -40,10 +40,13 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
   - Add note bar/form
   - Add label form
 - Pure components:
+  - MUI icons
 - Use effect:
   - Init RxDB
 - Custom hooks:
   - useNote
+  - useColourMode
+  - MUI hooks
   - RxDB hooks package
 - Global state management:
   - RxDB
