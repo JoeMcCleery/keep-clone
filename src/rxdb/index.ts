@@ -30,7 +30,12 @@ export default async function initRxDB() {
   const collections = await db.addCollections({
     labels: {
       schema: labelSchema as LabelSchema,
-      migrationStrategies: {},
+      migrationStrategies: {
+        1: function (oldLabel) {
+          delete oldLabel.id;
+          return oldLabel;
+        },
+      },
     },
     notes: {
       schema: noteSchema as NoteSchema,
