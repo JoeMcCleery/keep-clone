@@ -8,8 +8,14 @@ import {
 } from "@mui/material";
 import React, { createContext, useMemo } from "react";
 
-export const ColorModeContext = createContext({
-  toggleMode: () => {},
+interface IColourModeContext {
+  colourMode: PaletteMode;
+  toggleColourMode: () => void;
+}
+
+export const ColorModeContext = createContext<IColourModeContext>({
+  colourMode: "dark",
+  toggleColourMode: () => {},
 });
 
 // Get custom theme colours
@@ -35,11 +41,12 @@ export default function MUIThemeProvider({
 
   const colourModeContext = useMemo(
     () => ({
-      toggleMode: () => {
-        setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
+      colourMode: mode,
+      toggleColourMode: () => {
+        setMode((prevMode) => (prevMode == "light" ? "dark" : "light"));
       },
     }),
-    []
+    [mode]
   );
 
   const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);

@@ -46,9 +46,11 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - Custom hooks:
   - useNote
   - useColourMode
+  - useNavOpen
   - MUI hooks
   - RxDB hooks package
 - Global state management:
+  - useContext
   - RxDB
 - Reducer:
   - Used in custom hooks

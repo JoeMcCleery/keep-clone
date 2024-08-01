@@ -10,6 +10,7 @@ import InputBase from "@mui/material/InputBase";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import ColourModeToggle from "@/components/input/ColourModeToggle";
+import useNavOpen from "@/hooks/useNavOpen";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -52,42 +53,47 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Header() {
+  const { toggleNavOpen } = useNavOpen();
+
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h5"
-            noWrap
-            component="div"
-            sx={{ display: { xs: "none", sm: "block" } }}
-          >
-            Keep Clone
-          </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ "aria-label": "search" }}
-            />
-          </Search>
-          <Box sx={{ flexGrow: 1 }} />
-          <Box>
-            <ColourModeToggle />
-          </Box>
-        </Toolbar>
-      </AppBar>
-    </Box>
+    <AppBar
+      position="fixed"
+      sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+    >
+      <Toolbar>
+        <IconButton
+          size="large"
+          edge="start"
+          color="inherit"
+          aria-label="toggle drawer"
+          sx={{ mr: 2 }}
+          onClick={toggleNavOpen}
+          title="Toggle navigation drawer"
+        >
+          <MenuIcon />
+        </IconButton>
+        <Typography
+          variant="h5"
+          noWrap
+          component="div"
+          sx={{ display: { xs: "none", sm: "block" } }}
+        >
+          Keep Clone
+        </Typography>
+        <Search>
+          <SearchIconWrapper>
+            <SearchIcon />
+          </SearchIconWrapper>
+          <StyledInputBase
+            placeholder="Search…"
+            inputProps={{ "aria-label": "search" }}
+          />
+        </Search>
+        <Box sx={{ flexGrow: 1 }} />
+        <Box>
+          <ColourModeToggle />
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
 }

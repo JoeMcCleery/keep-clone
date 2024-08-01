@@ -1,9 +1,9 @@
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 export default function Home() {
   return (
-    <main>
+    <Box sx={{ p: 3 }}>
       <Typography>Hello World</Typography>
-    </main>
+    </Box>
   );
 }
