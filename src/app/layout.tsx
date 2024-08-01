@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import RxDBProvider from "@/rxdb/components/provider/RxDBProvider";
+import RxDBProvider from "@/components/provider/RxDBProvider";
 import MUIThemeProvider from "@/components/provider/MUIThemeProvider";
 import Header from "@/components/Header";
 import "@fontsource/roboto/300.css";
@@ -21,12 +21,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <RxDBProvider>
-          <MUIThemeProvider>
+        <MUIThemeProvider>
+          <RxDBProvider>
             <Header />
             {children}
-          </MUIThemeProvider>
-        </RxDBProvider>
+          </RxDBProvider>
+        </MUIThemeProvider>
       </body>
     </html>
   );
