@@ -1,9 +1,9 @@
 import { Box, Typography } from "@mui/material";
 
-export default function HomePage() {
+export default function ArchivePage() {
   return (
     <Box sx={{ p: 3 }}>
-      <Typography>Hello Home</Typography>
+      <Typography>Hello Archive</Typography>
     </Box>
   );
 }

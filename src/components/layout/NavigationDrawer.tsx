@@ -75,6 +75,7 @@ export default function NavigationDrawer() {
                 justifyContent: navOpen ? "initial" : "center",
                 px: 2.5,
               }}
+              selected={navItem.active}
               title={navItem.label}
               onClick={navItem.action}
             >
