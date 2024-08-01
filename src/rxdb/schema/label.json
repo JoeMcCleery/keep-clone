@@ -6,7 +6,8 @@
   "type": "object",
   "properties": {
     "name": {
-      "type": "string"
+      "type": "string",
+      "maxLength": 100
     }
   },
   "additionalProperties": false,
