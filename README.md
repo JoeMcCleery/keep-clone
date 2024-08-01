@@ -47,6 +47,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
   - useNote
   - useColourMode
   - useNavOpen
+  - useNavigation
   - MUI hooks
   - RxDB hooks package
 - Global state management:

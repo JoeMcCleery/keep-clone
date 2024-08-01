@@ -1,9 +1,7 @@
 "use client";
 
 import useNavOpen from "@/hooks/useNavOpen";
-import { Inbox } from "@mui/icons-material";
 import {
-  Box,
   CSSObject,
   Drawer,
   List,
@@ -15,6 +13,7 @@ import {
   Theme,
 } from "@mui/material";
 import HeaderOffset from "@/components/layout/HeaderOffset";
+import useNavigation from "@/hooks/useNavigation";
 
 const drawerWidth = 240;
 
@@ -56,6 +55,7 @@ const MiniDrawer = styled(Drawer, {
 
 export default function NavigationDrawer() {
   const { navOpen } = useNavOpen();
+  const navigation = useNavigation();
 
   return (
     <MiniDrawer
@@ -64,9 +64,9 @@ export default function NavigationDrawer() {
     >
       <HeaderOffset />
       <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+        {navigation.map((navItem, index) => (
           <ListItem
-            key={text}
+            key={navItem.label + index}
             disablePadding
           >
             <ListItemButton
@@ -75,7 +75,8 @@ export default function NavigationDrawer() {
                 justifyContent: navOpen ? "initial" : "center",
                 px: 2.5,
               }}
-              title={text}
+              title={navItem.label}
+              onClick={navItem.action}
             >
               <ListItemIcon
                 sx={{
@@ -84,10 +85,10 @@ export default function NavigationDrawer() {
                   justifyContent: "center",
                 }}
               >
-                <Inbox />
+                {navItem.icon}
               </ListItemIcon>
               <ListItemText
-                primary={text}
+                primary={navItem.label}
                 sx={{
                   opacity: navOpen ? 1 : 0,
                 }}
