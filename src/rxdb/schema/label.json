@@ -1,15 +1,20 @@
 {
   "title": "label",
-  "version": 1,
+  "version": 2,
   "description": "Describes a label",
-  "primaryKey": "name",
+  "primaryKey": "id",
   "type": "object",
   "properties": {
+    "id": {
+      "type": "string",
+      "maxLength": 32,
+      "format": "uuid"
+    },
     "name": {
       "type": "string",
       "maxLength": 100
     }
   },
   "additionalProperties": false,
-  "required": ["name"]
+  "required": ["id", "name"]
 }

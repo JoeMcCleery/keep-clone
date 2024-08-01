@@ -37,8 +37,9 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
   - Archive
 - Stateful components:
   - Note
-  - Add note bar/form
+  - Add note form
   - Add label form
+  - many more
 - Pure components:
   - MUI icons
 - Use effect:
@@ -48,10 +49,11 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
   - useColourMode
   - useNavOpen
   - useNavigation
+  - useLabels
   - MUI hooks
   - RxDB hooks package
 - Global state management:
-  - useContext
+  - useContext (TODO change this, in provider hell)
   - RxDB
 - Reducer:
   - Used in custom hooks

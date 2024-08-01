@@ -1,6 +1,8 @@
 import { ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Archive, Edit, Label, Lightbulb } from "@mui/icons-material";
+import useLabels from "./useLabels";
+import useEditLabelsModalOpen from "./useEditLabelsModalOpen";
 
 interface INavigation {
   icon?: ReactNode;
@@ -12,30 +14,34 @@ interface INavigation {
 export default function useNavigation() {
   const router = useRouter();
   const pathname = usePathname();
+  const labels = useLabels();
+  const { toggleModalOpen } = useEditLabelsModalOpen();
+
+  const labelNavigation: INavigation[] = labels.map((label) => ({
+    icon: <Label />,
+    label: label.name,
+    active: pathname === `/label/${label.name}`,
+    action: () => router.push(`/label/${label.name}`),
+  }));
 
   const navigation: INavigation[] = [
     {
       icon: <Lightbulb />,
       label: "Notes",
-      active: pathname == "/",
+      active: pathname === "/",
       action: () => router.push("/"),
     },
-    {
-      icon: <Label />,
-      label: "test",
-      active: pathname == "/label/test",
-      action: () => router.push("/label/test"),
-    },
+    ...labelNavigation,
     {
       icon: <Edit />,
-      label: "Edit Labels",
+      label: "Edit labels",
       active: false,
-      action: () => console.log("Hello Edit Label Modal"),
+      action: toggleModalOpen,
     },
     {
       icon: <Archive />,
       label: "Archive",
-      active: pathname == "/archive",
+      active: pathname === "/archive",
       action: () => router.push("/archive"),
     },
   ];

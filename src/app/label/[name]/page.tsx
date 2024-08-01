@@ -1,3 +1,6 @@
+"use client";
+
+import useLabels from "@/hooks/useLabels";
 import { Box, Typography } from "@mui/material";
 
 interface ILabelPageProps {
@@ -7,6 +10,8 @@ interface ILabelPageProps {
 }
 
 export default function LabelPage({ params }: ILabelPageProps) {
+  const labels = useLabels();
+
   return (
     <Box sx={{ p: 3 }}>
       <Typography>Hello Label: {params.name}</Typography>

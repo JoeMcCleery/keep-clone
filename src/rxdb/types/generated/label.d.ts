@@ -9,5 +9,6 @@
  * Describes a label
  */
 export interface Label {
+  id: string;
   name: string;
 }

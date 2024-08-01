@@ -10,6 +10,11 @@ import {
 } from "@/rxdb/types";
 import labelSchema from "@/rxdb/schema/label.json";
 import noteSchema from "@/rxdb/schema/note.json";
+import { v5 as uuidv5 } from "uuid";
+
+export function generateLabelId(name: string) {
+  return uuidv5(name, uuidv5.DNS);
+}
 
 export default async function initRxDB() {
   // Add dev-mode plugins
@@ -33,6 +38,10 @@ export default async function initRxDB() {
       migrationStrategies: {
         1: function (oldLabel) {
           delete oldLabel.id;
+          return oldLabel;
+        },
+        2: function (oldLabel) {
+          oldLabel.id = generateLabelId(oldLabel.name);
           return oldLabel;
         },
       },

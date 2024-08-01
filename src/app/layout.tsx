@@ -11,6 +11,8 @@ import NavigationDrawer from "@/components/layout/NavigationDrawer";
 import NavOpenProvider from "@/components/provider/NavOpenProvider";
 import { Box } from "@mui/material";
 import HeaderOffset from "@/components/layout/HeaderOffset";
+import EditLabelsModalOpenProvider from "@/components/provider/EditLabelsModalOpenProvider";
+import EditLabelsModal from "@/components/modal/EditLabelsModal";
 
 export const metadata: Metadata = {
   title: "Keep Clone",
@@ -28,17 +30,20 @@ export default function RootLayout({
         <MUIThemeProvider>
           <RxDBProvider>
             <NavOpenProvider>
-              <HeaderOffset />
-              <Box sx={{ display: "flex" }}>
-                <Header />
-                <NavigationDrawer />
-                <Box
-                  component="main"
-                  sx={{ flexGrow: 1 }}
-                >
-                  {children}
+              <EditLabelsModalOpenProvider>
+                <HeaderOffset />
+                <Box sx={{ display: "flex" }}>
+                  <Header />
+                  <NavigationDrawer />
+                  <Box
+                    component="main"
+                    sx={{ flexGrow: 1 }}
+                  >
+                    {children}
+                  </Box>
+                  <EditLabelsModal />
                 </Box>
-              </Box>
+              </EditLabelsModalOpenProvider>
             </NavOpenProvider>
           </RxDBProvider>
         </MUIThemeProvider>
