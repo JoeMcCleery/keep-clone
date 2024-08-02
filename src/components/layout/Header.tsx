@@ -10,7 +10,7 @@ import InputBase from "@mui/material/InputBase";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import ColourModeToggle from "@/components/input/ColourModeToggle";
-import useNavOpen from "@/hooks/useNavOpen";
+import { useGlobalStore } from "@/store";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -53,7 +53,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Header() {
-  const { toggleNavOpen } = useNavOpen();
+  const toggleNavOpen = useGlobalStore((state) => state.toggleNavigationOpen);
 
   return (
     <AppBar

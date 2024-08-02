@@ -7,19 +7,21 @@ import {
 } from "@mui/material";
 import HeaderOffset from "./HeaderOffset";
 import useNavigation, { INavigationItem } from "@/hooks/useNavigation";
-import useNavOpen from "@/hooks/useNavOpen";
 
 interface IDrawerContentProps {
   open?: boolean;
+  onClick?: () => void;
 }
 
-export default function DrawerContent({ open = true }: IDrawerContentProps) {
-  const { toggleNavOpen } = useNavOpen();
+export default function DrawerContent({
+  open = true,
+  onClick,
+}: IDrawerContentProps) {
   const navigation = useNavigation();
 
   function handleClick(navItem: INavigationItem) {
     navItem.action();
-    toggleNavOpen();
+    if (onClick) onClick();
   }
 
   return (

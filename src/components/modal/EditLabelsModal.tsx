@@ -1,6 +1,5 @@
 "use client";
 
-import useEditLabelsModalOpen from "@/hooks/useEditLabelsModalOpen";
 import useLabels from "@/hooks/useLabels";
 import {
   Button,
@@ -14,9 +13,16 @@ import {
 } from "@mui/material";
 import AddLabelForm from "../form/AddLabelForm";
 import EditLabelForm from "../form/EditLabelForm";
+import { useGlobalStore } from "@/store";
+import { useShallow } from "zustand/react/shallow";
 
 export default function EditLabelsModal() {
-  const { modalOpen, toggleModalOpen } = useEditLabelsModalOpen();
+  const { modalOpen, toggleModalOpen } = useGlobalStore(
+    useShallow((state) => ({
+      modalOpen: state.editLabelsModalOpen,
+      toggleModalOpen: state.toggleEditLabelsModalOpen,
+    }))
+  );
   const labels = useLabels();
 
   return (

@@ -1,22 +1,13 @@
 "use client";
 
+import { useGlobalStore } from "@/store";
 import {
   createTheme,
   CssBaseline,
   PaletteMode,
   ThemeProvider,
 } from "@mui/material";
-import React, { createContext, useMemo } from "react";
-
-interface IColourModeContext {
-  colourMode: PaletteMode;
-  toggleColourMode: () => void;
-}
-
-export const ColorModeContext = createContext<IColourModeContext>({
-  colourMode: "dark",
-  toggleColourMode: () => {},
-});
+import { ReactNode, useMemo } from "react";
 
 // Get custom theme colours
 const getDesignTokens = (mode: PaletteMode) => ({
@@ -35,28 +26,15 @@ const getDesignTokens = (mode: PaletteMode) => ({
 export default function MUIThemeProvider({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
-  const [mode, setMode] = React.useState<PaletteMode>("dark");
-
-  const colourModeContext = useMemo(
-    () => ({
-      colourMode: mode,
-      toggleColourMode: () => {
-        setMode((prevMode) => (prevMode == "light" ? "dark" : "light"));
-      },
-    }),
-    [mode]
-  );
-
+  const mode = useGlobalStore((state) => state.colourMode);
   const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
 
   return (
-    <ColorModeContext.Provider value={colourModeContext}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        {children}
-      </ThemeProvider>
-    </ColorModeContext.Provider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      {children}
+    </ThemeProvider>
   );
 }

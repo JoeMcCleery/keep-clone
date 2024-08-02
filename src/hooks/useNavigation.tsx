@@ -2,10 +2,10 @@ import { ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Archive, Edit, Label, Lightbulb } from "@mui/icons-material";
 import useLabels from "./useLabels";
-import useEditLabelsModalOpen from "./useEditLabelsModalOpen";
+import { useGlobalStore } from "@/store";
 
 export interface INavigationItem {
-  icon?: ReactNode;
+  icon: ReactNode;
   label: string;
   active: boolean;
   action: () => void;
@@ -15,7 +15,9 @@ export default function useNavigation() {
   const router = useRouter();
   const pathname = usePathname();
   const labels = useLabels();
-  const { toggleModalOpen } = useEditLabelsModalOpen();
+  const toggleEditLabelsModalOpen = useGlobalStore(
+    (state) => state.toggleEditLabelsModalOpen
+  );
 
   const labelNavigation: INavigationItem[] = labels.map((label) => ({
     icon: <Label />,
@@ -36,7 +38,7 @@ export default function useNavigation() {
       icon: <Edit />,
       label: "Edit labels",
       active: false,
-      action: toggleModalOpen,
+      action: toggleEditLabelsModalOpen,
     },
     {
       icon: <Archive />,

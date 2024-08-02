@@ -39,23 +39,23 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
   - Note
   - Add note form
   - Add label form
-  - many more
+  - manyyyyy more
 - Pure components:
   - MUI icons
 - Use effect:
   - Init RxDB
 - Custom hooks:
   - useNote
-  - useColourMode
-  - useNavOpen
   - useNavigation
   - useLabels
   - MUI hooks
   - RxDB hooks package
+  - Zustand hooks
 - Global state management:
-  - useContext (TODO change this, in provider hell)
+  - useContext
+  - Zustand store
   - RxDB
 - Reducer:
-  - Used in custom hooks
+  - Used in custom hooks... I assume
 - Animation:
   - Handled by MUI
