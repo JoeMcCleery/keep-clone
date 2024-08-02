@@ -48,7 +48,7 @@ export default function EditLabelsModal() {
       </DialogContent>
       <Divider />
       <DialogActions>
-        <Button onClick={toggleModalOpen}>Done</Button>
+        <Button onClick={toggleModalOpen}>Close</Button>
       </DialogActions>
     </Dialog>
   );
