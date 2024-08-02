@@ -4,7 +4,7 @@ import { Archive, Edit, Label, Lightbulb } from "@mui/icons-material";
 import useLabels from "./useLabels";
 import useEditLabelsModalOpen from "./useEditLabelsModalOpen";
 
-interface INavigation {
+export interface INavigationItem {
   icon?: ReactNode;
   label: string;
   active: boolean;
@@ -17,14 +17,14 @@ export default function useNavigation() {
   const labels = useLabels();
   const { toggleModalOpen } = useEditLabelsModalOpen();
 
-  const labelNavigation: INavigation[] = labels.map((label) => ({
+  const labelNavigation: INavigationItem[] = labels.map((label) => ({
     icon: <Label />,
     label: label.name,
     active: pathname === `/label/${label.name}`,
     action: () => router.push(`/label/${label.name}`),
   }));
 
-  const navigation: INavigation[] = [
+  const navigation: INavigationItem[] = [
     {
       icon: <Lightbulb />,
       label: "Notes",
