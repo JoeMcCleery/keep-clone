@@ -10,10 +10,14 @@ import {
 } from "@/rxdb/types";
 import labelSchema from "@/rxdb/schema/label.json";
 import noteSchema from "@/rxdb/schema/note.json";
-import { v5 as uuidv5 } from "uuid";
+import { v5 as uuidv5, v4 as uuidv4 } from "uuid";
 
 export function generateLabelId(name: string) {
   return uuidv5(name, uuidv5.DNS);
+}
+
+export function generateNoteId() {
+  return uuidv4();
 }
 
 export default async function initRxDB() {
@@ -32,7 +36,7 @@ export default async function initRxDB() {
   });
 
   // Add collections
-  const collections = await db.addCollections({
+  const collections: DatabaseCollections = await db.addCollections({
     labels: {
       schema: labelSchema as LabelSchema,
       migrationStrategies: {
@@ -42,6 +46,9 @@ export default async function initRxDB() {
         },
         2: function (oldLabel) {
           oldLabel.id = generateLabelId(oldLabel.name);
+          return oldLabel;
+        },
+        3: function (oldLabel) {
           return oldLabel;
         },
       },

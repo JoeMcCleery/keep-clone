@@ -1,5 +1,6 @@
 "use client";
 
+import AddNoteBar from "@/components/input/AddNoteBar";
 import useLabels from "@/hooks/useLabels";
 import { Box, Typography } from "@mui/material";
 
@@ -14,6 +15,7 @@ export default function LabelPage({ params }: ILabelPageProps) {
 
   return (
     <Box sx={{ p: 3 }}>
+      <AddNoteBar />
       <Typography>Hello Label: {params.name}</Typography>
     </Box>
   );

@@ -11,6 +11,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import ColourModeToggle from "@/components/input/ColourModeToggle";
 import { useGlobalStore } from "@/store";
+import { Tooltip } from "@mui/material";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -61,17 +62,20 @@ export default function Header() {
       sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
     >
       <Toolbar>
-        <IconButton
-          size="large"
-          edge="start"
-          color="inherit"
-          aria-label="toggle drawer"
-          sx={{ mr: 2 }}
-          onClick={toggleNavOpen}
-          title="Toggle navigation drawer"
+        <Tooltip
+          title="Main menu"
+          disableInteractive
         >
-          <MenuIcon />
-        </IconButton>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            sx={{ mr: 2 }}
+            onClick={toggleNavOpen}
+          >
+            <MenuIcon />
+          </IconButton>
+        </Tooltip>
         <Typography
           variant="h5"
           noWrap

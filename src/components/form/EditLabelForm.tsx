@@ -2,7 +2,13 @@
 
 import { Label } from "@/rxdb/types/generated/label";
 import { Delete, Edit, Label as LabelIcon } from "@mui/icons-material";
-import { Box, FormControl, IconButton, TextField } from "@mui/material";
+import {
+  Box,
+  FormControl,
+  IconButton,
+  TextField,
+  Tooltip,
+} from "@mui/material";
 import { ChangeEvent, useState } from "react";
 import { RxDocument } from "rxdb";
 
@@ -23,12 +29,12 @@ export default function EditLabelForm({ label }: IEditLabelFormProps) {
   async function submitAction() {
     // Cannot have empty name
     if (name === "") {
-      setError("A name is required.");
+      setError("Label requires a name.");
       return;
     }
 
     // Update existing label
-    await label.patch({
+    await label.incrementalPatch({
       name,
     });
 
@@ -51,17 +57,20 @@ export default function EditLabelForm({ label }: IEditLabelFormProps) {
     >
       <Box marginRight={1}>
         {focused ? (
-          <IconButton
-            size="small"
+          <Tooltip
             title="Remove label"
-            onClick={remove}
+            disableInteractive
           >
-            <Delete fontSize="inherit" />
-          </IconButton>
+            <IconButton
+              size="small"
+              onClick={remove}
+            >
+              <Delete fontSize="inherit" />
+            </IconButton>
+          </Tooltip>
         ) : (
           <IconButton
             size="small"
-            title="Edit label"
             disabled
           >
             <LabelIcon fontSize="inherit" />
@@ -80,13 +89,17 @@ export default function EditLabelForm({ label }: IEditLabelFormProps) {
         helperText={error}
       />
       <Box marginLeft={1}>
-        <IconButton
-          size="small"
+        <Tooltip
           title="Update label"
-          type="submit"
+          disableInteractive
         >
-          <Edit fontSize="inherit" />
-        </IconButton>
+          <IconButton
+            size="small"
+            type="submit"
+          >
+            <Edit fontSize="inherit" />
+          </IconButton>
+        </Tooltip>
       </Box>
     </Box>
   );

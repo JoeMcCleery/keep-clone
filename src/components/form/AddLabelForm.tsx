@@ -3,7 +3,13 @@
 import { generateLabelId } from "@/rxdb";
 import { Label } from "@/rxdb/types/generated/label";
 import { Add, Done } from "@mui/icons-material";
-import { Box, FormControl, IconButton, TextField } from "@mui/material";
+import {
+  Box,
+  FormControl,
+  IconButton,
+  TextField,
+  Tooltip,
+} from "@mui/material";
 import { ChangeEvent, useRef, useState } from "react";
 import { useRxCollection } from "rxdb-hooks";
 
@@ -21,7 +27,7 @@ export default function AddLabelForm() {
   async function submitAction() {
     // Cannot have empty name
     if (name === "") {
-      setError("A name is required.");
+      setError("Label requires a name.");
       return;
     }
 
@@ -34,12 +40,12 @@ export default function AddLabelForm() {
       })
       .exec();
     if (existing) {
-      setError("Name must be unique.");
+      setError("Label already exists.");
       return;
     }
 
     // Create new label
-    await labelCollection?.insert({
+    await labelCollection?.incrementalUpsert({
       id: generateLabelId(name),
       name,
     });
@@ -60,7 +66,6 @@ export default function AddLabelForm() {
       <Box marginRight={1}>
         <IconButton
           size="small"
-          title="Create label"
           disabled
         >
           <Add fontSize="inherit" />
@@ -77,13 +82,17 @@ export default function AddLabelForm() {
         helperText={error}
       />
       <Box marginLeft={1}>
-        <IconButton
-          size="small"
+        <Tooltip
           title="Create label"
-          type="submit"
+          disableInteractive
         >
-          <Done fontSize="inherit" />
-        </IconButton>
+          <IconButton
+            size="small"
+            type="submit"
+          >
+            <Done fontSize="inherit" />
+          </IconButton>
+        </Tooltip>
       </Box>
     </Box>
   );

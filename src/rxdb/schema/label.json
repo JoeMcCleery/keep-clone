@@ -1,6 +1,6 @@
 {
   "title": "label",
-  "version": 2,
+  "version": 3,
   "description": "Describes a label",
   "primaryKey": "id",
   "type": "object",
@@ -16,5 +16,6 @@
     }
   },
   "additionalProperties": false,
-  "required": ["id", "name"]
+  "required": ["id", "name"],
+  "indexes": ["name"]
 }
