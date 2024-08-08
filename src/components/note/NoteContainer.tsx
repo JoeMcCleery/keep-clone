@@ -18,6 +18,7 @@ export default function NoteContainer({
       ? {
           outline: 1,
           outlineColor: theme.palette.divider,
+          background: "none",
         }
       : {
           backgroundColor: theme.palette[background].main,
