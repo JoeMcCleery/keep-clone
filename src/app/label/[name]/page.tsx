@@ -2,7 +2,7 @@
 
 import AddNoteBar from "@/components/input/AddNoteBar";
 import useLabels from "@/hooks/useLabels";
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 
 interface ILabelPageProps {
   params: {
@@ -11,12 +11,19 @@ interface ILabelPageProps {
 }
 
 export default function LabelPage({ params }: ILabelPageProps) {
-  const labels = useLabels();
+  const { labels, isFetching } = useLabels();
+  const label = labels.find((label) => label.name === params.name);
 
   return (
     <Box sx={{ p: 3 }}>
-      <AddNoteBar />
-      <Typography>Hello Label: {params.name}</Typography>
+      {isFetching ? (
+        <CircularProgress />
+      ) : (
+        <>
+          <AddNoteBar labelId={label?.id} />
+          <Typography>Hello Label: {params.name}</Typography>
+        </>
+      )}
     </Box>
   );
 }

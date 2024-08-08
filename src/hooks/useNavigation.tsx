@@ -14,7 +14,7 @@ export interface INavigationItem {
 export default function useNavigation() {
   const router = useRouter();
   const pathname = usePathname();
-  const labels = useLabels();
+  const { labels } = useLabels();
   const toggleEditLabelsModalOpen = useGlobalStore(
     (state) => state.toggleEditLabelsModalOpen
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, ReactNode } from "react";
 import { Provider } from "rxdb-hooks";
 import { Database } from "@/rxdb/types";
 import initRxDB from "@/rxdb";
@@ -10,7 +10,7 @@ let init = false;
 export default function RxDBProvider({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   const [db, setDb] = useState<Database>();
 

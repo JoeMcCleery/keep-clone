@@ -23,7 +23,7 @@ export default function EditLabelsModal() {
       toggleModalOpen: state.toggleEditLabelsModalOpen,
     }))
   );
-  const labels = useLabels();
+  const { labels } = useLabels();
 
   return (
     <Dialog
