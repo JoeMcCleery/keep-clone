@@ -30,6 +30,7 @@ export default function NotesList({
   }
 
   const hasPinned = pinned.length > 0;
+  const hasOther = other.length > 0;
 
   return (
     <>
@@ -51,7 +52,9 @@ export default function NotesList({
       )}
 
       <Box width="100%">
-        {hasPinned && <Typography variant="overline">Others</Typography>}
+        {hasPinned && hasOther && (
+          <Typography variant="overline">Others</Typography>
+        )}
         <Masonry
           spacing={2}
           sequential
