@@ -15,6 +15,7 @@ import {
 import { useState } from "react";
 import { useRxCollection } from "rxdb-hooks";
 import NoteBackgroundOptions from "@/components/input/NoteBackgroundOptions";
+import NoteContainer from "@/components/container/NoteContainer";
 
 interface INoteFormProps {
   defaults?: Partial<Note>;
@@ -22,7 +23,6 @@ interface INoteFormProps {
 
 export default function NoteForm({ defaults }: INoteFormProps) {
   const noteCollection = useRxCollection("notes");
-  const [focused, setFocused] = useState(false);
   // Note data
   const [id] = useState(defaults?.id ?? generateNoteId());
   const [type, setType] = useState<NoteType>(defaults?.type ?? "simple");
@@ -36,6 +36,11 @@ export default function NoteForm({ defaults }: INoteFormProps) {
   const [labels, setLabels] = useState<string[]>(defaults?.labels ?? []);
   const [pinned, setPinned] = useState(defaults?.pinned ?? false);
   const [archived, setArchived] = useState(defaults?.archived ?? false);
+
+  function updateContent(index: number, item: NoteContentItem) {
+    content[index] = item;
+    setContent([...content]);
+  }
 
   function submitAction() {
     // Cannot have no title and no content
@@ -54,11 +59,6 @@ export default function NoteForm({ defaults }: INoteFormProps) {
       pinned,
       archived,
     });
-  }
-
-  function updateContent(index: number, item: NoteContentItem) {
-    content[index] = item;
-    setContent([...content]);
   }
 
   function simpleContentView() {
@@ -111,42 +111,44 @@ export default function NoteForm({ defaults }: INoteFormProps) {
 
   return (
     <ClickAwayListener onClickAway={submitAction}>
-      <Box
-        component="form"
-        action={submitAction}
-      >
-        <Box display="flex">
-          <Input
-            placeholder="Title"
-            onChange={(e) => setTitle(e.target.value)}
-            value={title}
-            fullWidth
-            disableUnderline
-            sx={{ px: 2, py: 1, fontWeight: "bold" }}
-          />
-          <Tooltip
-            title={pinned ? "Unpin note" : "Pin note"}
-            disableInteractive
-          >
-            <IconButton
-              size="large"
-              onClick={() => setPinned((isPinned) => !isPinned)}
-            >
-              {pinned ? <PushPin /> : <PushPinOutlined />}
-            </IconButton>
-          </Tooltip>
-        </Box>
-        {type === "simple" ? simpleContentView() : todoContentView()}
+      <NoteContainer background={background}>
         <Box
-          display="flex"
-          p={1}
+          component="form"
+          action={submitAction}
         >
-          <NoteBackgroundOptions
-            background={background}
-            onChange={setBackground}
-          />
+          <Box display="flex">
+            <Input
+              placeholder="Title"
+              onChange={(e) => setTitle(e.target.value)}
+              value={title}
+              fullWidth
+              disableUnderline
+              sx={{ px: 2, py: 1, fontWeight: "bold" }}
+            />
+            <Tooltip
+              title={pinned ? "Unpin note" : "Pin note"}
+              disableInteractive
+            >
+              <IconButton
+                size="large"
+                onClick={() => setPinned((isPinned) => !isPinned)}
+              >
+                {pinned ? <PushPin /> : <PushPinOutlined />}
+              </IconButton>
+            </Tooltip>
+          </Box>
+          {type === "simple" ? simpleContentView() : todoContentView()}
+          <Box
+            display="flex"
+            p={1}
+          >
+            <NoteBackgroundOptions
+              background={background}
+              onChange={setBackground}
+            />
+          </Box>
         </Box>
-      </Box>
+      </NoteContainer>
     </ClickAwayListener>
   );
 }

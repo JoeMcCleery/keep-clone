@@ -5,7 +5,6 @@ import {
   ClickAwayListener,
   IconButton,
   Input,
-  Paper,
   Tooltip,
   useTheme,
 } from "@mui/material";
@@ -13,14 +12,24 @@ import NoteForm from "../form/NoteForm";
 import { useState } from "react";
 import { CheckBoxOutlined } from "@mui/icons-material";
 import { Note } from "@/rxdb/types/generated/note";
+import NoteContainer from "@/components/container/NoteContainer";
 
-export default function AddNoteBar() {
-  const theme = useTheme();
+interface IAddNoteBarProps {
+  labelId?: string;
+}
+
+function getDefaults(labelId?: string) {
+  return {
+    ...(labelId ? { labels: [labelId] } : {}),
+  };
+}
+
+export default function AddNoteBar({ labelId }: IAddNoteBarProps) {
   const [focused, setFocused] = useState(false);
-  const [defaults, setDefaults] = useState<Partial<Note>>({});
+  const [defaults, setDefaults] = useState<Partial<Note>>(getDefaults(labelId));
 
   function reset() {
-    setDefaults({});
+    setDefaults(getDefaults(labelId));
     setFocused(false);
   }
 
@@ -31,38 +40,34 @@ export default function AddNoteBar() {
 
   return (
     <ClickAwayListener onClickAway={reset}>
-      <Paper
-        elevation={4}
-        sx={{
-          outline: 1,
-          outlineColor: theme.palette.divider,
-        }}
-      >
+      <Box>
         {focused ? (
           <NoteForm defaults={defaults} />
         ) : (
-          <Box display="flex">
-            <Input
-              placeholder="Take a note..."
-              disableUnderline
-              fullWidth
-              sx={{ pl: 2, py: 1, fontWeight: "bold" }}
-              onFocus={() => setFocused(true)}
-            />
-            <Tooltip
-              title="New list"
-              disableInteractive
-            >
-              <IconButton
-                size="large"
-                onClick={() => newList()}
+          <NoteContainer>
+            <Box display="flex">
+              <Input
+                placeholder="Take a note..."
+                disableUnderline
+                fullWidth
+                sx={{ pl: 2, py: 1, fontWeight: "bold" }}
+                onFocus={() => setFocused(true)}
+              />
+              <Tooltip
+                title="New list"
+                disableInteractive
               >
-                <CheckBoxOutlined />
-              </IconButton>
-            </Tooltip>
-          </Box>
+                <IconButton
+                  size="large"
+                  onClick={() => newList()}
+                >
+                  <CheckBoxOutlined />
+                </IconButton>
+              </Tooltip>
+            </Box>
+          </NoteContainer>
         )}
-      </Paper>
+      </Box>
     </ClickAwayListener>
   );
 }
