@@ -15,7 +15,8 @@ import {
 import { useState } from "react";
 import { useRxCollection } from "rxdb-hooks";
 import NoteBackgroundOptions from "@/components/input/NoteBackgroundOptions";
-import NoteContainer from "@/components/container/NoteContainer";
+import NoteContainer from "@/components/note/NoteContainer";
+import LabelArray from "../note/LabelArray";
 
 interface INoteFormProps {
   defaults?: Partial<Note>;
@@ -138,6 +139,12 @@ export default function NoteForm({ defaults }: INoteFormProps) {
             </Tooltip>
           </Box>
           {type === "simple" ? simpleContentView() : todoContentView()}
+          {labels.length > 0 && (
+            <LabelArray
+              labelIds={labels}
+              onChange={setLabels}
+            />
+          )}
           <Box
             display="flex"
             p={1}

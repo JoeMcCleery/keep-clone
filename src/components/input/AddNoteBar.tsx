@@ -12,7 +12,7 @@ import NoteForm from "../form/NoteForm";
 import { useState } from "react";
 import { CheckBoxOutlined } from "@mui/icons-material";
 import { Note } from "@/rxdb/types/generated/note";
-import NoteContainer from "@/components/container/NoteContainer";
+import NoteContainer from "@/components/note/NoteContainer";
 
 interface IAddNoteBarProps {
   labelId?: string;

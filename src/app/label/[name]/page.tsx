@@ -11,8 +11,9 @@ interface ILabelPageProps {
 }
 
 export default function LabelPage({ params }: ILabelPageProps) {
+  const name = decodeURI(params.name);
   const { labels, isFetching } = useLabels();
-  const label = labels.find((label) => label.name === params.name);
+  const label = labels.find((label) => label.name === name);
 
   return (
     <Box sx={{ p: 3 }}>
@@ -21,7 +22,7 @@ export default function LabelPage({ params }: ILabelPageProps) {
       ) : (
         <>
           <AddNoteBar labelId={label?.id} />
-          <Typography>Hello Label: {params.name}</Typography>
+          <Typography>Hello Label: {name}</Typography>
         </>
       )}
     </Box>
