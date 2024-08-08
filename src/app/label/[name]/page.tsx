@@ -1,8 +1,9 @@
 "use client";
 
 import AddNoteBar from "@/components/input/AddNoteBar";
+import NotesList from "@/components/layout/NotesList";
 import useLabels from "@/hooks/useLabels";
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { CircularProgress, Typography } from "@mui/material";
 
 interface ILabelPageProps {
   params: {
@@ -16,15 +17,15 @@ export default function LabelPage({ params }: ILabelPageProps) {
   const label = labels.find((label) => label.name === name);
 
   return (
-    <Box sx={{ p: 3 }}>
+    <>
       {isFetching ? (
         <CircularProgress />
       ) : (
         <>
           <AddNoteBar labelId={label?.id} />
-          <Typography>Hello Label: {name}</Typography>
+          <NotesList labels={label ? [label.id] : undefined} />
         </>
       )}
-    </Box>
+    </>
   );
 }

@@ -3,26 +3,29 @@
 import { generateNoteId } from "@/rxdb";
 import { Note } from "@/rxdb/types/generated/note";
 import { NoteBackground, NoteContentItem, NoteType } from "@/rxdb/types/note";
-import { PushPin, PushPinOutlined } from "@mui/icons-material";
 import {
   Box,
   Checkbox,
   ClickAwayListener,
-  IconButton,
+  Divider,
   Input,
-  Tooltip,
+  useTheme,
 } from "@mui/material";
 import { useState } from "react";
 import { useRxCollection } from "rxdb-hooks";
 import NoteBackgroundOptions from "@/components/input/NoteBackgroundOptions";
 import NoteContainer from "@/components/note/NoteContainer";
-import LabelArray from "../note/LabelArray";
+import LabelArray from "@/components/note/LabelArray";
+import ArchivedToggle from "@/components/input/ArchivedToggle";
+import PinnedToggle from "@/components/input/PinnedToggle";
+import NoteOptions from "@/components/input/NoteOptions";
 
 interface INoteFormProps {
   defaults?: Partial<Note>;
 }
 
 export default function NoteForm({ defaults }: INoteFormProps) {
+  const theme = useTheme();
   const noteCollection = useRxCollection("notes");
   // Note data
   const [id] = useState(defaults?.id ?? generateNoteId());
@@ -39,18 +42,19 @@ export default function NoteForm({ defaults }: INoteFormProps) {
   const [archived, setArchived] = useState(defaults?.archived ?? false);
 
   function updateContent(index: number, item: NoteContentItem) {
-    content[index] = item;
-    setContent([...content]);
+    const newContent = [...content];
+    newContent[index] = item;
+    setContent(newContent);
   }
 
-  function submitAction() {
+  async function submitAction() {
     // Cannot have no title and no content
     if (title === "" && !content.some((item) => item.text !== "")) {
       return;
     }
 
     // Create or update note
-    noteCollection?.incrementalUpsert({
+    await noteCollection?.incrementalUpsert({
       id,
       type,
       title,
@@ -81,33 +85,77 @@ export default function NoteForm({ defaults }: INoteFormProps) {
   }
 
   function todoContentView() {
-    return content.map((item, idx) => (
-      <Box
-        key={idx}
-        display="flex"
-        sx={{ pl: 1, alignItems: "start" }}
-      >
-        <Checkbox
-          color="default"
-          checked={item.completed}
-          onChange={(e) =>
-            updateContent(idx, { ...item, completed: e.target.checked })
-          }
-        />
-        <Input
-          autoFocus
-          placeholder=""
-          onChange={(e) =>
-            updateContent(0, { text: e.target.value, completed: false })
-          }
-          value={item.text}
-          fullWidth
-          disableUnderline
-          multiline
-          sx={{ py: 1.5, fontSize: "0.9em" }}
-        />
-      </Box>
-    ));
+    const completed = content.filter((c) => c.completed);
+    const uncompleted = content.filter((c) => !c.completed);
+    return (
+      <>
+        {uncompleted.map((item, idx) => (
+          <Box
+            key={idx}
+            display="flex"
+            sx={{ pl: 1, alignItems: "start" }}
+          >
+            <Checkbox
+              color="default"
+              checked={item.completed}
+              onChange={(e) =>
+                updateContent(idx, { ...item, completed: e.target.checked })
+              }
+            />
+            <Input
+              autoFocus
+              placeholder=""
+              onChange={(e) =>
+                updateContent(idx, { ...item, text: e.target.value })
+              }
+              value={item.text}
+              fullWidth
+              disableUnderline
+              multiline
+              sx={{ py: 1.5, fontSize: "0.9em" }}
+            />
+          </Box>
+        ))}
+        {completed.length > 0 && uncompleted.length > 0 && (
+          <Divider sx={{ mx: 2 }} />
+        )}
+        {completed.map((item, idx) => (
+          <Box
+            key={idx}
+            display="flex"
+            sx={{ pl: 1, alignItems: "start" }}
+          >
+            <Checkbox
+              color="default"
+              checked={item.completed}
+              onChange={(e) =>
+                updateContent(idx, { ...item, completed: e.target.checked })
+              }
+            />
+            <Input
+              autoFocus
+              placeholder=""
+              onChange={(e) =>
+                updateContent(idx, { ...item, text: e.target.value })
+              }
+              value={item.text}
+              fullWidth
+              disableUnderline
+              multiline
+              sx={{
+                py: 1.5,
+                fontSize: "0.9em",
+                textDecoration: "line-through",
+                textDecorationColor: theme.palette.text.disabled,
+              }}
+              inputProps={{
+                style: { color: theme.palette.text.disabled },
+              }}
+            />
+          </Box>
+        ))}
+      </>
+    );
   }
 
   return (
@@ -117,7 +165,12 @@ export default function NoteForm({ defaults }: INoteFormProps) {
         action={submitAction}
       >
         <NoteContainer background={background}>
-          <Box display="flex">
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            pr={1}
+          >
             <Input
               placeholder="Title"
               onChange={(e) => setTitle(e.target.value)}
@@ -126,32 +179,40 @@ export default function NoteForm({ defaults }: INoteFormProps) {
               disableUnderline
               sx={{ px: 2, py: 1, fontWeight: "bold" }}
             />
-            <Tooltip
-              title={pinned ? "Unpin note" : "Pin note"}
-              disableInteractive
-            >
-              <IconButton
-                size="large"
-                onClick={() => setPinned((isPinned) => !isPinned)}
-              >
-                {pinned ? <PushPin /> : <PushPinOutlined />}
-              </IconButton>
-            </Tooltip>
+            <PinnedToggle
+              pinned={pinned}
+              onChange={setPinned}
+            />
           </Box>
+
           {type === "simple" ? simpleContentView() : todoContentView()}
+
           {labels.length > 0 && (
             <LabelArray
               labelIds={labels}
               onChange={setLabels}
             />
           )}
+
           <Box
             display="flex"
+            flexWrap="wrap"
+            gap={1}
             p={1}
           >
             <NoteBackgroundOptions
               background={background}
               onChange={setBackground}
+            />
+            <ArchivedToggle
+              archived={archived}
+              onChange={setArchived}
+            />
+            <NoteOptions
+              type={type}
+              labels={labels}
+              onChangeType={setType}
+              onChangeLabels={setLabels}
             />
           </Box>
         </NoteContainer>

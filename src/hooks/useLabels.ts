@@ -3,7 +3,9 @@ import { useRxData } from "rxdb-hooks";
 
 export default function useLabels() {
   const { result, isFetching } = useRxData<Label>("labels", (collection) =>
-    collection.find()
+    collection.find({
+      sort: [{ name: "asc" }],
+    })
   );
 
   return { labels: result, isFetching };

@@ -33,9 +33,18 @@ export default function RootLayout({
               <NavigationDrawer />
               <Box
                 component="main"
-                sx={{ flexGrow: 1 }}
+                flexGrow={1}
               >
-                {children}
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  gap={3}
+                  p={3}
+                  justifyContent="center"
+                  alignItems="center"
+                >
+                  {children}
+                </Box>
               </Box>
               <EditLabelsModal />
             </Box>

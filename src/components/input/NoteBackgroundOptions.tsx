@@ -73,7 +73,7 @@ export default function NoteBackgroundOptions({
         disableInteractive
       >
         <IconButton onClick={handleClick}>
-          <ColorLensOutlined />
+          <ColorLensOutlined fontSize="small" />
         </IconButton>
       </Tooltip>
       <Popover

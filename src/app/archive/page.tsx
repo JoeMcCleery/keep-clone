@@ -1,9 +1,9 @@
-import { Box, Typography } from "@mui/material";
+import NotesList from "@/components/layout/NotesList";
 
 export default function ArchivePage() {
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography>Hello Archive</Typography>
-    </Box>
+    <>
+      <NotesList archived />
+    </>
   );
 }
