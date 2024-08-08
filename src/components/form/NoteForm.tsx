@@ -111,11 +111,11 @@ export default function NoteForm({ defaults }: INoteFormProps) {
 
   return (
     <ClickAwayListener onClickAway={submitAction}>
-      <NoteContainer background={background}>
-        <Box
-          component="form"
-          action={submitAction}
-        >
+      <Box
+        component="form"
+        action={submitAction}
+      >
+        <NoteContainer background={background}>
           <Box display="flex">
             <Input
               placeholder="Title"
@@ -147,8 +147,8 @@ export default function NoteForm({ defaults }: INoteFormProps) {
               onChange={setBackground}
             />
           </Box>
-        </Box>
-      </NoteContainer>
+        </NoteContainer>
+      </Box>
     </ClickAwayListener>
   );
 }
