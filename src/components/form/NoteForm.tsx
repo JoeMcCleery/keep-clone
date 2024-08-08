@@ -4,9 +4,17 @@ import { generateNoteId } from "@/rxdb";
 import { Note } from "@/rxdb/types/generated/note";
 import { NoteBackground, NoteContentItem, NoteType } from "@/rxdb/types/note";
 import { PushPin, PushPinOutlined } from "@mui/icons-material";
-import { Box, Checkbox, IconButton, Input, Tooltip } from "@mui/material";
+import {
+  Box,
+  Checkbox,
+  ClickAwayListener,
+  IconButton,
+  Input,
+  Tooltip,
+} from "@mui/material";
 import { useState } from "react";
 import { useRxCollection } from "rxdb-hooks";
+import NoteBackgroundOptions from "@/components/input/NoteBackgroundOptions";
 
 interface INoteFormProps {
   defaults?: Partial<Note>;
@@ -102,32 +110,43 @@ export default function NoteForm({ defaults }: INoteFormProps) {
   }
 
   return (
-    <Box
-      component="form"
-      action={submitAction}
-    >
-      <Box display="flex">
-        <Input
-          placeholder="Title"
-          onChange={(e) => setTitle(e.target.value)}
-          value={title}
-          fullWidth
-          disableUnderline
-          sx={{ px: 2, py: 1, fontWeight: "bold" }}
-        />
-        <Tooltip
-          title={pinned ? "Unpin note" : "Pin note"}
-          disableInteractive
-        >
-          <IconButton
-            size="large"
-            onClick={() => setPinned((isPinned) => !isPinned)}
+    <ClickAwayListener onClickAway={submitAction}>
+      <Box
+        component="form"
+        action={submitAction}
+      >
+        <Box display="flex">
+          <Input
+            placeholder="Title"
+            onChange={(e) => setTitle(e.target.value)}
+            value={title}
+            fullWidth
+            disableUnderline
+            sx={{ px: 2, py: 1, fontWeight: "bold" }}
+          />
+          <Tooltip
+            title={pinned ? "Unpin note" : "Pin note"}
+            disableInteractive
           >
-            {pinned ? <PushPin /> : <PushPinOutlined />}
-          </IconButton>
-        </Tooltip>
+            <IconButton
+              size="large"
+              onClick={() => setPinned((isPinned) => !isPinned)}
+            >
+              {pinned ? <PushPin /> : <PushPinOutlined />}
+            </IconButton>
+          </Tooltip>
+        </Box>
+        {type === "simple" ? simpleContentView() : todoContentView()}
+        <Box
+          display="flex"
+          p={1}
+        >
+          <NoteBackgroundOptions
+            background={background}
+            onChange={setBackground}
+          />
+        </Box>
       </Box>
-      {type === "simple" ? simpleContentView() : todoContentView()}
-    </Box>
+    </ClickAwayListener>
   );
 }
