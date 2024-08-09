@@ -105,13 +105,13 @@ export default function NoteForm({
 
           {type === "simple" ? (
             <NoteSimpleContent
-              autofocus={defaultFocus}
+              autofocus={focus.current}
               content={content}
               onChange={setContent}
             />
           ) : (
             <NoteTodoContent
-              autofocus={defaultFocus}
+              autofocus={focus.current}
               content={content}
               onChange={setContent}
             />
