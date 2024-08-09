@@ -1,4 +1,4 @@
-import { Archive, ArchiveOutlined } from "@mui/icons-material";
+import { ArchiveOutlined, Unarchive } from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 
@@ -18,7 +18,7 @@ export default function ArchivedToggle({
     >
       <IconButton onClick={() => onChange((a) => !a)}>
         {archived ? (
-          <Archive fontSize="small" />
+          <Unarchive fontSize="small" />
         ) : (
           <ArchiveOutlined fontSize="small" />
         )}
