@@ -3,8 +3,8 @@
 import { generateNoteId } from "@/rxdb";
 import { Note } from "@/rxdb/types/generated/note";
 import { NoteBackground, NoteContentItem, NoteType } from "@/rxdb/types/note";
-import { Box, ClickAwayListener, Divider, Input } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Box, ClickAwayListener, Input } from "@mui/material";
+import { useRef, useState } from "react";
 import { useRxCollection } from "rxdb-hooks";
 import NoteBackgroundOptions from "@/components/input/NoteBackgroundOptions";
 import NoteContainer from "@/components/note/NoteContainer";
@@ -18,13 +18,16 @@ import NoteSimpleContent from "../note/NoteSimpleContent";
 interface INoteFormProps {
   defaults?: Partial<Note>;
   autoSubmit?: boolean;
+  defaultFocus?: boolean;
 }
 
 export default function NoteForm({
   defaults,
   autoSubmit = false,
+  defaultFocus = false,
 }: INoteFormProps) {
   const noteCollection = useRxCollection("notes");
+  const focus = useRef(defaultFocus);
   // Note data
   const [id] = useState(defaults?.id ?? generateNoteId());
   const [type, setType] = useState<NoteType>(defaults?.type ?? "simple");
@@ -39,11 +42,14 @@ export default function NoteForm({
   const [pinned, setPinned] = useState(defaults?.pinned ?? false);
   const [archived, setArchived] = useState(defaults?.archived ?? false);
 
-  useEffect(() => {
-    if (autoSubmit) submitAction();
-  }, [id, type, title, content, background, labels, pinned, archived]);
+  function onClickAway() {
+    submitAction();
+    focus.current = false;
+  }
 
   async function submitAction() {
+    if (!focus.current) return;
+
     // Cannot have no title and no content
     if (title === "" && !content.some((item) => item.text !== "")) {
       return;
@@ -63,10 +69,13 @@ export default function NoteForm({
   }
 
   return (
-    <ClickAwayListener onClickAway={submitAction}>
+    <ClickAwayListener onClickAway={onClickAway}>
       <Box
         component="form"
         onSubmit={(e) => e.preventDefault()}
+        onMouseDown={() => {
+          focus.current = true;
+        }}
       >
         <NoteContainer background={background}>
           <Box

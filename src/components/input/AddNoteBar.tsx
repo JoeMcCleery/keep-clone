@@ -29,6 +29,7 @@ export default function AddNoteBar({ labelId }: IAddNoteBarProps) {
   const [defaults, setDefaults] = useState<Partial<Note>>(getDefaults(labelId));
 
   function reset() {
+    if (!focused) return;
     setTimeout(() => {
       setDefaults(getDefaults(labelId));
       setFocused(false);
@@ -48,7 +49,10 @@ export default function AddNoteBar({ labelId }: IAddNoteBarProps) {
       <ClickAwayListener onClickAway={reset}>
         <Box>
           {focused ? (
-            <NoteForm defaults={defaults} />
+            <NoteForm
+              defaults={defaults}
+              defaultFocus
+            />
           ) : (
             <NoteContainer>
               <Box display="flex">
