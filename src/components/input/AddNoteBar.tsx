@@ -29,8 +29,10 @@ export default function AddNoteBar({ labelId }: IAddNoteBarProps) {
   const [defaults, setDefaults] = useState<Partial<Note>>(getDefaults(labelId));
 
   function reset() {
-    setDefaults(getDefaults(labelId));
-    setFocused(false);
+    setTimeout(() => {
+      setDefaults(getDefaults(labelId));
+      setFocused(false);
+    });
   }
 
   function newList() {

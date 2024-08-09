@@ -50,6 +50,7 @@ export default function NotesList({
               <NoteForm
                 key={n.id}
                 defaults={n}
+                autoSubmit
               />
             ))}
           </Masonry>
@@ -73,6 +74,7 @@ export default function NotesList({
             <NoteForm
               key={n.id}
               defaults={n}
+              autoSubmit
             />
           ))}
         </Masonry>

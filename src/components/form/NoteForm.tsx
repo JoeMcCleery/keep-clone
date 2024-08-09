@@ -3,15 +3,8 @@
 import { generateNoteId } from "@/rxdb";
 import { Note } from "@/rxdb/types/generated/note";
 import { NoteBackground, NoteContentItem, NoteType } from "@/rxdb/types/note";
-import {
-  Box,
-  Checkbox,
-  ClickAwayListener,
-  Divider,
-  Input,
-  useTheme,
-} from "@mui/material";
-import { useState } from "react";
+import { Box, ClickAwayListener, Divider, Input } from "@mui/material";
+import { useEffect, useState } from "react";
 import { useRxCollection } from "rxdb-hooks";
 import NoteBackgroundOptions from "@/components/input/NoteBackgroundOptions";
 import NoteContainer from "@/components/note/NoteContainer";
@@ -19,13 +12,18 @@ import LabelArray from "@/components/note/LabelArray";
 import ArchivedToggle from "@/components/input/ArchivedToggle";
 import PinnedToggle from "@/components/input/PinnedToggle";
 import NoteOptions from "@/components/input/NoteOptions";
+import NoteTodoContent from "@/components/note/NoteTodoContent";
+import NoteSimpleContent from "../note/NoteSimpleContent";
 
 interface INoteFormProps {
   defaults?: Partial<Note>;
+  autoSubmit?: boolean;
 }
 
-export default function NoteForm({ defaults }: INoteFormProps) {
-  const theme = useTheme();
+export default function NoteForm({
+  defaults,
+  autoSubmit = false,
+}: INoteFormProps) {
   const noteCollection = useRxCollection("notes");
   // Note data
   const [id] = useState(defaults?.id ?? generateNoteId());
@@ -41,11 +39,9 @@ export default function NoteForm({ defaults }: INoteFormProps) {
   const [pinned, setPinned] = useState(defaults?.pinned ?? false);
   const [archived, setArchived] = useState(defaults?.archived ?? false);
 
-  function updateContent(index: number, item: NoteContentItem) {
-    const newContent = [...content];
-    newContent[index] = item;
-    setContent(newContent);
-  }
+  useEffect(() => {
+    if (autoSubmit) submitAction();
+  }, [id, type, title, content, background, labels, pinned, archived]);
 
   async function submitAction() {
     // Cannot have no title and no content
@@ -66,103 +62,11 @@ export default function NoteForm({ defaults }: INoteFormProps) {
     });
   }
 
-  function simpleContentView() {
-    let text = content.map((item) => item.text).join("\n");
-    return (
-      <Input
-        autoFocus
-        placeholder="Take a note..."
-        onChange={(e) =>
-          updateContent(0, { ...content[0], text: e.target.value })
-        }
-        value={text}
-        fullWidth
-        disableUnderline
-        multiline
-        sx={{ px: 2, py: 1, fontSize: "0.9em" }}
-      />
-    );
-  }
-
-  function todoContentView() {
-    const completed = content.filter((c) => c.completed);
-    const uncompleted = content.filter((c) => !c.completed);
-    return (
-      <>
-        {uncompleted.map((item, idx) => (
-          <Box
-            key={idx}
-            display="flex"
-            sx={{ pl: 1, alignItems: "start" }}
-          >
-            <Checkbox
-              color="default"
-              checked={item.completed}
-              onChange={(e) =>
-                updateContent(idx, { ...item, completed: e.target.checked })
-              }
-            />
-            <Input
-              autoFocus
-              placeholder=""
-              onChange={(e) =>
-                updateContent(idx, { ...item, text: e.target.value })
-              }
-              value={item.text}
-              fullWidth
-              disableUnderline
-              multiline
-              sx={{ py: 1.5, fontSize: "0.9em" }}
-            />
-          </Box>
-        ))}
-        {completed.length > 0 && uncompleted.length > 0 && (
-          <Divider sx={{ mx: 2 }} />
-        )}
-        {completed.map((item, idx) => (
-          <Box
-            key={idx}
-            display="flex"
-            sx={{ pl: 1, alignItems: "start" }}
-          >
-            <Checkbox
-              color="default"
-              checked={item.completed}
-              onChange={(e) =>
-                updateContent(idx, { ...item, completed: e.target.checked })
-              }
-            />
-            <Input
-              autoFocus
-              placeholder=""
-              onChange={(e) =>
-                updateContent(idx, { ...item, text: e.target.value })
-              }
-              value={item.text}
-              fullWidth
-              disableUnderline
-              multiline
-              sx={{
-                py: 1.5,
-                fontSize: "0.9em",
-                textDecoration: "line-through",
-                textDecorationColor: theme.palette.text.disabled,
-              }}
-              inputProps={{
-                style: { color: theme.palette.text.disabled },
-              }}
-            />
-          </Box>
-        ))}
-      </>
-    );
-  }
-
   return (
     <ClickAwayListener onClickAway={submitAction}>
       <Box
         component="form"
-        action={submitAction}
+        onSubmit={(e) => e.preventDefault()}
       >
         <NoteContainer background={background}>
           <Box
@@ -185,7 +89,17 @@ export default function NoteForm({ defaults }: INoteFormProps) {
             />
           </Box>
 
-          {type === "simple" ? simpleContentView() : todoContentView()}
+          {type === "simple" ? (
+            <NoteSimpleContent
+              content={content}
+              onChange={setContent}
+            />
+          ) : (
+            <NoteTodoContent
+              content={content}
+              onChange={setContent}
+            />
+          )}
 
           {labels.length > 0 && (
             <LabelArray
