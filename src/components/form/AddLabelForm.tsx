@@ -68,6 +68,7 @@ export default function AddLabelForm() {
             size="small"
             type="submit"
             edge="end"
+            onClick={submitAction}
           >
             <Done fontSize="inherit" />
           </IconButton>

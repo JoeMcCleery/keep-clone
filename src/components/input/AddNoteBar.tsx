@@ -3,10 +3,10 @@
 import {
   Box,
   ClickAwayListener,
+  Container,
   IconButton,
   Input,
   Tooltip,
-  useTheme,
 } from "@mui/material";
 import NoteForm from "../form/NoteForm";
 import { useState } from "react";
@@ -41,35 +41,40 @@ export default function AddNoteBar({ labelId }: IAddNoteBarProps) {
   }
 
   return (
-    <ClickAwayListener onClickAway={reset}>
-      <Box>
-        {focused ? (
-          <NoteForm defaults={defaults} />
-        ) : (
-          <NoteContainer>
-            <Box display="flex">
-              <Input
-                placeholder="Take a note..."
-                disableUnderline
-                fullWidth
-                sx={{ pl: 2, py: 1, fontWeight: "bold" }}
-                onFocus={() => setFocused(true)}
-              />
-              <Tooltip
-                title="New list"
-                disableInteractive
-              >
-                <IconButton
-                  size="large"
-                  onClick={() => newList()}
+    <Container
+      maxWidth="sm"
+      disableGutters
+    >
+      <ClickAwayListener onClickAway={reset}>
+        <Box>
+          {focused ? (
+            <NoteForm defaults={defaults} />
+          ) : (
+            <NoteContainer>
+              <Box display="flex">
+                <Input
+                  placeholder="Take a note..."
+                  disableUnderline
+                  fullWidth
+                  sx={{ pl: 2, py: 1, fontWeight: "bold" }}
+                  onFocus={() => setFocused(true)}
+                />
+                <Tooltip
+                  title="New list"
+                  disableInteractive
                 >
-                  <CheckBoxOutlined />
-                </IconButton>
-              </Tooltip>
-            </Box>
-          </NoteContainer>
-        )}
-      </Box>
-    </ClickAwayListener>
+                  <IconButton
+                    size="large"
+                    onClick={() => newList()}
+                  >
+                    <CheckBoxOutlined />
+                  </IconButton>
+                </Tooltip>
+              </Box>
+            </NoteContainer>
+          )}
+        </Box>
+      </ClickAwayListener>
+    </Container>
   );
 }

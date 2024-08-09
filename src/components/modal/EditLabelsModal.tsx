@@ -29,7 +29,7 @@ export default function EditLabelsModal() {
       onClose={toggleModalOpen}
     >
       <DialogTitle>Edit labels</DialogTitle>
-      <List disablePadding>
+      <List>
         <AddLabelForm />
         {labels.map((label) => (
           <EditLabelForm

@@ -1,9 +1,8 @@
 "use client";
 
 import useNotes from "@/hooks/useNotes";
-import { Box, CircularProgress, Typography } from "@mui/material";
-import NoteForm from "../form/NoteForm";
-import { Masonry } from "@mui/lab";
+import { CircularProgress, Container, Typography } from "@mui/material";
+import NotesMasonry from "./NotesMasonry";
 
 interface INotesListProps {
   archived?: boolean;
@@ -33,52 +32,31 @@ export default function NotesList({
   const hasOther = other.length > 0;
 
   return (
-    <>
+    <Container
+      disableGutters
+      maxWidth="xl"
+    >
       {hasPinned && (
-        <Box width="100%">
+        <>
           <Typography
             variant="overline"
             color="grey"
           >
             Pinned
           </Typography>
-          <Masonry
-            spacing={2}
-            sequential
-          >
-            {pinned.map((n) => (
-              <NoteForm
-                key={n.id}
-                defaults={n}
-                autoSubmit
-              />
-            ))}
-          </Masonry>
-        </Box>
+          <NotesMasonry notes={pinned} />
+        </>
       )}
 
-      <Box width="100%">
-        {hasPinned && hasOther && (
-          <Typography
-            variant="overline"
-            color="grey"
-          >
-            Others
-          </Typography>
-        )}
-        <Masonry
-          spacing={2}
-          sequential
+      {hasPinned && hasOther && (
+        <Typography
+          variant="overline"
+          color="grey"
         >
-          {other.map((n) => (
-            <NoteForm
-              key={n.id}
-              defaults={n}
-              autoSubmit
-            />
-          ))}
-        </Masonry>
-      </Box>
-    </>
+          Others
+        </Typography>
+      )}
+      <NotesMasonry notes={other} />
+    </Container>
   );
 }

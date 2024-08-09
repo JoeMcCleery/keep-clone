@@ -31,7 +31,7 @@ export default function ChangeNoteLabelsModal({
   onClose,
   onChange,
 }: IChangeNoteLabelsModal) {
-  const { labels, isFetching } = useLabels();
+  const { labels } = useLabels();
 
   function setNoteLabel(labelId: string, selected: boolean) {
     if (selected) {
@@ -47,36 +47,32 @@ export default function ChangeNoteLabelsModal({
       onClose={onClose}
     >
       <DialogTitle>Edit note labels</DialogTitle>
-      <List disablePadding>
+      <List>
         <AddLabelForm />
-        {isFetching ? (
-          <CircularProgress />
-        ) : (
-          labels.map((label) => {
-            const selected = noteLabels.includes(label.id);
+        {labels.map((label) => {
+          const selected = noteLabels.includes(label.id);
 
-            return (
-              <ListItem
-                key={label.name}
-                disablePadding
+          return (
+            <ListItem
+              key={label.name}
+              disablePadding
+            >
+              <ListItemButton
+                onClick={() => setNoteLabel(label.id, !selected)}
+                dense
               >
-                <ListItemButton
-                  onClick={() => setNoteLabel(label.id, !selected)}
-                  dense
-                >
-                  <ListItemIcon>
-                    {selected ? (
-                      <CheckBox fontSize="small" />
-                    ) : (
-                      <CheckBoxOutlineBlankOutlined fontSize="small" />
-                    )}
-                  </ListItemIcon>
-                  <ListItemText primary={label.name} />
-                </ListItemButton>
-              </ListItem>
-            );
-          })
-        )}
+                <ListItemIcon>
+                  {selected ? (
+                    <CheckBox fontSize="small" />
+                  ) : (
+                    <CheckBoxOutlineBlankOutlined fontSize="small" />
+                  )}
+                </ListItemIcon>
+                <ListItemText primary={label.name} />
+              </ListItemButton>
+            </ListItem>
+          );
+        })}
       </List>
       <Divider />
       <DialogActions>
