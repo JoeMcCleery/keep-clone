@@ -64,5 +64,24 @@ export default async function initRxDB() {
     },
   });
 
+  // Add middleware
+  collections.labels.preRemove(function (label) {
+    // When removing label, also remove it's id from notes
+    return collections.notes
+      .find({
+        selector: {
+          labels: { $in: [label.id] },
+        },
+      })
+      .exec()
+      .then((notes) => {
+        notes.forEach((note) => {
+          note.incrementalPatch({
+            labels: note.labels.filter((id) => id !== label.id),
+          });
+        });
+      });
+  }, false);
+
   return db;
 }
