@@ -36,7 +36,12 @@ export default function NotesList({
     <>
       {hasPinned && (
         <Box width="100%">
-          <Typography variant="overline">Pinned</Typography>
+          <Typography
+            variant="overline"
+            color="grey"
+          >
+            Pinned
+          </Typography>
           <Masonry
             spacing={2}
             sequential
@@ -53,7 +58,12 @@ export default function NotesList({
 
       <Box width="100%">
         {hasPinned && hasOther && (
-          <Typography variant="overline">Others</Typography>
+          <Typography
+            variant="overline"
+            color="grey"
+          >
+            Others
+          </Typography>
         )}
         <Masonry
           spacing={2}
