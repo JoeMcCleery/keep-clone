@@ -4,11 +4,13 @@ import { Dispatch, SetStateAction } from "react";
 
 interface INoteSimpleContentProps {
   content: NoteContentItem[];
+  autofocus?: boolean;
   onChange: Dispatch<SetStateAction<NoteContentItem[]>>;
 }
 
 export default function NoteSimpleContent({
   content,
+  autofocus = false,
   onChange,
 }: INoteSimpleContentProps) {
   let text = content.map((item) => item.text).join("\n");
@@ -22,7 +24,7 @@ export default function NoteSimpleContent({
 
   return (
     <Input
-      autoFocus
+      autoFocus={autofocus}
       placeholder="Take a note..."
       onChange={(e) => updateContent(e.target.value)}
       value={text}

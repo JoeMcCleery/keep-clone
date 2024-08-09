@@ -4,7 +4,7 @@ import { generateNoteId } from "@/rxdb";
 import { Note } from "@/rxdb/types/generated/note";
 import { NoteBackground, NoteContentItem, NoteType } from "@/rxdb/types/note";
 import { Box, ClickAwayListener, Input } from "@mui/material";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRxCollection } from "rxdb-hooks";
 import NoteBackgroundOptions from "@/components/input/NoteBackgroundOptions";
 import NoteContainer from "@/components/note/NoteContainer";
@@ -41,6 +41,11 @@ export default function NoteForm({
   const [labels, setLabels] = useState<string[]>(defaults?.labels ?? []);
   const [pinned, setPinned] = useState(defaults?.pinned ?? false);
   const [archived, setArchived] = useState(defaults?.archived ?? false);
+
+  useEffect(() => {
+    if (!autoSubmit) return;
+    submitAction();
+  }, [id, type, title, content, background, labels, pinned, archived]);
 
   function onClickAway() {
     submitAction();
@@ -100,11 +105,13 @@ export default function NoteForm({
 
           {type === "simple" ? (
             <NoteSimpleContent
+              autofocus={defaultFocus}
               content={content}
               onChange={setContent}
             />
           ) : (
             <NoteTodoContent
+              autofocus={defaultFocus}
               content={content}
               onChange={setContent}
             />

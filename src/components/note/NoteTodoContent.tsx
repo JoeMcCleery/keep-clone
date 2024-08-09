@@ -5,11 +5,13 @@ import { Dispatch, SetStateAction } from "react";
 
 interface INoteTodoContentProps {
   content: NoteContentItem[];
+  autofocus?: boolean;
   onChange: Dispatch<SetStateAction<NoteContentItem[]>>;
 }
 
 export default function NoteTodoContent({
   content,
+  autofocus = false,
   onChange,
 }: INoteTodoContentProps) {
   const completed = content.filter((c) => c.completed);
@@ -37,6 +39,7 @@ export default function NoteTodoContent({
         <NoteTodoContentItem
           key={content.indexOf(item)}
           item={item}
+          autofocus={autofocus}
           onChange={(newItem) => updateContent(content.indexOf(item), newItem)}
         />
       ))}
@@ -47,6 +50,7 @@ export default function NoteTodoContent({
         <NoteTodoContentItem
           key={content.indexOf(item)}
           item={item}
+          autofocus={autofocus}
           onChange={(newItem) => updateContent(content.indexOf(item), newItem)}
         />
       ))}

@@ -13,11 +13,13 @@ import {
 
 interface INoteTodoContentItemProps {
   item: NoteContentItem;
+  autofocus?: boolean;
   onChange: (newItem: NoteContentItem | null) => void;
 }
 
 export default function NoteTodoContentItem({
   item,
+  autofocus = false,
   onChange,
 }: INoteTodoContentItemProps) {
   const theme = useTheme();
@@ -56,7 +58,7 @@ export default function NoteTodoContentItem({
         color="default"
       />
       <Input
-        autoFocus
+        autoFocus={autofocus}
         onChange={(e) => updateText(e.target.value)}
         value={item.text}
         fullWidth
