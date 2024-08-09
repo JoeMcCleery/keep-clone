@@ -87,6 +87,7 @@ export default function NoteBackgroundOptions({
       >
         <Box
           display="flex"
+          flexWrap="wrap"
           gap={1}
           p={2}
         >
