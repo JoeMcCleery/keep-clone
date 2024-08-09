@@ -4,17 +4,16 @@ import { generateLabelId } from "@/rxdb";
 import { Label } from "@/rxdb/types/generated/label";
 import { Add, Done } from "@mui/icons-material";
 import {
-  Box,
-  FormControl,
   IconButton,
+  ListItem,
+  ListItemIcon,
   TextField,
   Tooltip,
 } from "@mui/material";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useRxCollection } from "rxdb-hooks";
 
 export default function AddLabelForm() {
-  const formRef = useRef<HTMLFormElement>();
   const labelCollection = useRxCollection<Label>("labels");
   const [name, setName] = useState("");
   const [error, setError] = useState("");
@@ -56,32 +55,11 @@ export default function AddLabelForm() {
   }
 
   return (
-    <Box
+    <ListItem
       component="form"
       autoComplete="off"
       action={submitAction}
-      ref={formRef}
-      sx={{ display: "flex", alignItems: "flex-end" }}
-    >
-      <Box marginRight={1}>
-        <IconButton
-          size="small"
-          disabled
-        >
-          <Add fontSize="inherit" />
-        </IconButton>
-      </Box>
-      <TextField
-        id="label-name"
-        name="label-name"
-        label="New label name"
-        variant="standard"
-        value={name}
-        onChange={onChange}
-        error={error !== ""}
-        helperText={error}
-      />
-      <Box marginLeft={1}>
+      secondaryAction={
         <Tooltip
           title="Create label"
           disableInteractive
@@ -89,11 +67,28 @@ export default function AddLabelForm() {
           <IconButton
             size="small"
             type="submit"
+            edge="end"
           >
             <Done fontSize="inherit" />
           </IconButton>
         </Tooltip>
-      </Box>
-    </Box>
+      }
+    >
+      <ListItemIcon>
+        <Add
+          color="disabled"
+          fontSize="small"
+        />
+      </ListItemIcon>
+      <TextField
+        variant="standard"
+        placeholder="New label name"
+        value={name}
+        onChange={onChange}
+        error={error !== ""}
+        helperText={error}
+        fullWidth
+      />
+    </ListItem>
   );
 }

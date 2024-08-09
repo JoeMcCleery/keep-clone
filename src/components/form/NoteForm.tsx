@@ -189,7 +189,7 @@ export default function NoteForm({ defaults }: INoteFormProps) {
 
           {labels.length > 0 && (
             <LabelArray
-              labelIds={labels}
+              noteLabels={labels}
               onChange={setLabels}
             />
           )}

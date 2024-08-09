@@ -4,6 +4,7 @@ import { NoteType } from "@/rxdb/types/note";
 import { MoreVert } from "@mui/icons-material";
 import { Tooltip, IconButton, Menu, MenuItem } from "@mui/material";
 import { Dispatch, SetStateAction, useState } from "react";
+import ChangeNoteLabels from "./ChangeNoteLabels";
 
 interface INoteOptionsProps {
   type: NoteType;
@@ -31,7 +32,6 @@ export default function NoteOptions({
 
   function toggleType() {
     onChangeType((t) => (t === "simple" ? "todo" : "simple"));
-    handleClose();
   }
 
   return (
@@ -49,7 +49,10 @@ export default function NoteOptions({
         open={open}
         onClose={handleClose}
       >
-        <MenuItem>{labels.length > 0 ? "Change labels" : "Add label"}</MenuItem>
+        <ChangeNoteLabels
+          labels={labels}
+          onChange={onChangeLabels}
+        />
         <MenuItem onClick={toggleType}>
           {type === "simple" ? "Show" : "Hide"} tick boxes
         </MenuItem>

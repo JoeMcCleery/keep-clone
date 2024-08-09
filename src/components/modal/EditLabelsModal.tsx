@@ -5,11 +5,9 @@ import {
   Button,
   Dialog,
   DialogActions,
-  DialogContent,
   DialogTitle,
   Divider,
   List,
-  ListItem,
 } from "@mui/material";
 import AddLabelForm from "../form/AddLabelForm";
 import EditLabelForm from "../form/EditLabelForm";
@@ -31,21 +29,15 @@ export default function EditLabelsModal() {
       onClose={toggleModalOpen}
     >
       <DialogTitle>Edit labels</DialogTitle>
-      <DialogContent>
-        <List disablePadding>
-          <ListItem disableGutters>
-            <AddLabelForm />
-          </ListItem>
-          {labels.map((label) => (
-            <ListItem
-              disableGutters
-              key={label.name}
-            >
-              <EditLabelForm label={label} />
-            </ListItem>
-          ))}
-        </List>
-      </DialogContent>
+      <List disablePadding>
+        <AddLabelForm />
+        {labels.map((label) => (
+          <EditLabelForm
+            key={label.id}
+            label={label}
+          />
+        ))}
+      </List>
       <Divider />
       <DialogActions>
         <Button onClick={toggleModalOpen}>Close</Button>

@@ -3,9 +3,9 @@
 import { Label } from "@/rxdb/types/generated/label";
 import { Delete, Edit, Label as LabelIcon } from "@mui/icons-material";
 import {
-  Box,
-  FormControl,
   IconButton,
+  ListItem,
+  ListItemIcon,
   TextField,
   Tooltip,
 } from "@mui/material";
@@ -47,48 +47,13 @@ export default function EditLabelForm({ label }: IEditLabelFormProps) {
   }
 
   return (
-    <Box
+    <ListItem
       component="form"
       autoComplete="off"
       action={submitAction}
       onMouseEnter={() => setFocused(true)}
       onMouseLeave={() => setFocused(false)}
-      sx={{ display: "flex", alignItems: "flex-end" }}
-    >
-      <Box marginRight={1}>
-        {focused ? (
-          <Tooltip
-            title="Remove label"
-            disableInteractive
-          >
-            <IconButton
-              size="small"
-              onClick={remove}
-            >
-              <Delete fontSize="inherit" />
-            </IconButton>
-          </Tooltip>
-        ) : (
-          <IconButton
-            size="small"
-            disabled
-          >
-            <LabelIcon fontSize="inherit" />
-          </IconButton>
-        )}
-      </Box>
-
-      <TextField
-        id="label-name"
-        name="label-name"
-        variant="standard"
-        value={name}
-        onFocus={() => setFocused(true)}
-        onChange={onChange}
-        error={error !== ""}
-        helperText={error}
-      />
-      <Box marginLeft={1}>
+      secondaryAction={
         <Tooltip
           title="Update label"
           disableInteractive
@@ -96,11 +61,45 @@ export default function EditLabelForm({ label }: IEditLabelFormProps) {
           <IconButton
             size="small"
             type="submit"
+            edge="end"
           >
             <Edit fontSize="inherit" />
           </IconButton>
         </Tooltip>
-      </Box>
-    </Box>
+      }
+    >
+      <ListItemIcon>
+        {focused ? (
+          <Tooltip
+            title="Remove label"
+            disableInteractive
+          >
+            <IconButton
+              edge="start"
+              size="small"
+              onClick={remove}
+            >
+              <Delete fontSize="inherit" />
+            </IconButton>
+          </Tooltip>
+        ) : (
+          <LabelIcon
+            fontSize="small"
+            color="disabled"
+          />
+        )}
+      </ListItemIcon>
+
+      <TextField
+        variant="standard"
+        placeholder="Label name"
+        value={name}
+        onFocus={() => setFocused(true)}
+        onChange={onChange}
+        error={error !== ""}
+        helperText={error}
+        fullWidth
+      />
+    </ListItem>
   );
 }
