@@ -80,11 +80,11 @@ export default function Header() {
           variant="h5"
           noWrap
           component="div"
-          sx={{ display: { xs: "none", sm: "block" } }}
+          // sx={{ display: { xs: "none", sm: "block" } }}
         >
           Keep Clone
         </Typography>
-        <Search>
+        {/* <Search>
           <SearchIconWrapper>
             <SearchIcon />
           </SearchIconWrapper>
@@ -92,7 +92,7 @@ export default function Header() {
             placeholder="Search…"
             inputProps={{ "aria-label": "search" }}
           />
-        </Search>
+        </Search> */}
         <Box sx={{ flexGrow: 1 }} />
         <Box>
           <ColourModeToggle />
