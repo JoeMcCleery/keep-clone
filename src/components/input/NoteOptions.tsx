@@ -5,17 +5,18 @@ import { MoreVert } from "@mui/icons-material";
 import { Tooltip, IconButton, Menu, MenuItem } from "@mui/material";
 import { Dispatch, SetStateAction, useState } from "react";
 import ChangeNoteLabels from "./ChangeNoteLabels";
+import DeleteNoteOption from "./DeleteNoteOption";
+import { RxDocument } from "rxdb";
+import { Note } from "@/rxdb/types/generated/note";
 
 interface INoteOptionsProps {
-  type: NoteType;
-  labels: string[];
+  note: RxDocument<Note>;
   onChangeType: Dispatch<SetStateAction<NoteType>>;
   onChangeLabels: Dispatch<SetStateAction<string[]>>;
 }
 
 export default function NoteOptions({
-  type,
-  labels,
+  note,
   onChangeType,
   onChangeLabels,
 }: INoteOptionsProps) {
@@ -50,12 +51,13 @@ export default function NoteOptions({
         onClose={handleClose}
       >
         <ChangeNoteLabels
-          labels={labels}
+          labels={note.labels}
           onChange={onChangeLabels}
         />
         <MenuItem onClick={toggleType}>
-          {type === "simple" ? "Show" : "Hide"} tick boxes
+          {note.type === "simple" ? "Show" : "Hide"} tick boxes
         </MenuItem>
+        <DeleteNoteOption note={note} />
       </Menu>
     </>
   );

@@ -14,16 +14,15 @@ import PinnedToggle from "@/components/input/PinnedToggle";
 import NoteOptions from "@/components/input/NoteOptions";
 import NoteTodoContent from "@/components/note/NoteTodoContent";
 import NoteSimpleContent from "../note/NoteSimpleContent";
+import { isRxDocument, RxDocument } from "rxdb";
 
 interface INoteFormProps {
-  defaults?: Partial<Note>;
-  autoSubmit?: boolean;
+  defaults?: Partial<Note> | RxDocument<Note>;
   defaultFocus?: boolean;
 }
 
 export default function NoteForm({
   defaults,
-  autoSubmit = false,
   defaultFocus = false,
 }: INoteFormProps) {
   const noteCollection = useRxCollection("notes");
@@ -42,8 +41,10 @@ export default function NoteForm({
   const [pinned, setPinned] = useState(defaults?.pinned ?? false);
   const [archived, setArchived] = useState(defaults?.archived ?? false);
 
+  const note = isRxDocument(defaults) ? (defaults as RxDocument<Note>) : null;
+
   useEffect(() => {
-    if (!autoSubmit) return;
+    if (!note) return;
     submitAction();
   }, [id, type, title, content, background, labels, pinned, archived]);
 
@@ -138,12 +139,13 @@ export default function NoteForm({
               archived={archived}
               onChange={setArchived}
             />
-            <NoteOptions
-              type={type}
-              labels={labels}
-              onChangeType={setType}
-              onChangeLabels={setLabels}
-            />
+            {note && (
+              <NoteOptions
+                note={note}
+                onChangeType={setType}
+                onChangeLabels={setLabels}
+              />
+            )}
           </Box>
         </NoteContainer>
       </Box>

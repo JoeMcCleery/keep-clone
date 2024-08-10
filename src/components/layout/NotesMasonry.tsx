@@ -25,7 +25,6 @@ export default function NotesMasonry({ notes }: INotesMasonryProps) {
         <NoteForm
           key={note.id}
           defaults={note}
-          autoSubmit
         />
       ))}
     </Masonry>
