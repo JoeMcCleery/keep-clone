@@ -10,13 +10,17 @@ import { RxDocument } from "rxdb";
 import { Note } from "@/rxdb/types/generated/note";
 
 interface INoteOptionsProps {
-  note: RxDocument<Note>;
+  note: RxDocument<Note> | null;
+  type: NoteType;
+  labels: string[];
   onChangeType: Dispatch<SetStateAction<NoteType>>;
   onChangeLabels: Dispatch<SetStateAction<string[]>>;
 }
 
 export default function NoteOptions({
   note,
+  type,
+  labels,
   onChangeType,
   onChangeLabels,
 }: INoteOptionsProps) {
@@ -51,13 +55,13 @@ export default function NoteOptions({
         onClose={handleClose}
       >
         <ChangeNoteLabels
-          labels={note.labels}
+          labels={labels}
           onChange={onChangeLabels}
         />
         <MenuItem onClick={toggleType}>
-          {note.type === "simple" ? "Show" : "Hide"} tick boxes
+          {type === "simple" ? "Show" : "Hide"} tick boxes
         </MenuItem>
-        <DeleteNoteOption note={note} />
+        {note && <DeleteNoteOption note={note} />}
       </Menu>
     </>
   );

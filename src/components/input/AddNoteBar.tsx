@@ -52,6 +52,7 @@ export default function AddNoteBar({ labelId }: IAddNoteBarProps) {
             <NoteForm
               defaults={defaults}
               defaultFocus
+              onSubmitButton={reset}
             />
           ) : (
             <NoteContainer>

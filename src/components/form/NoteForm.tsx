@@ -3,7 +3,7 @@
 import { generateNoteId } from "@/rxdb";
 import { Note } from "@/rxdb/types/generated/note";
 import { NoteBackground, NoteContentItem, NoteType } from "@/rxdb/types/note";
-import { Box, ClickAwayListener, Input } from "@mui/material";
+import { Box, Button, ClickAwayListener, Divider, Input } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { useRxCollection } from "rxdb-hooks";
 import NoteBackgroundOptions from "@/components/input/NoteBackgroundOptions";
@@ -19,11 +19,13 @@ import { isRxDocument, RxDocument } from "rxdb";
 interface INoteFormProps {
   defaults?: Partial<Note> | RxDocument<Note>;
   defaultFocus?: boolean;
+  onSubmitButton?: () => void;
 }
 
 export default function NoteForm({
   defaults,
   defaultFocus = false,
+  onSubmitButton,
 }: INoteFormProps) {
   const noteCollection = useRxCollection("notes");
   const focus = useRef(defaultFocus);
@@ -48,6 +50,13 @@ export default function NoteForm({
     submitAction();
   }, [id, type, title, content, background, labels, pinned, archived]);
 
+  const noContent = title === "" && !content.some((item) => item.text !== "");
+
+  function onClickSubmitButton() {
+    submitAction();
+    onSubmitButton!();
+  }
+
   function onClickAway() {
     submitAction();
     focus.current = false;
@@ -57,7 +66,7 @@ export default function NoteForm({
     if (!focus.current) return;
 
     // Cannot have no title and no content
-    if (title === "" && !content.some((item) => item.text !== "")) {
+    if (noContent) {
       return;
     }
 
@@ -139,12 +148,21 @@ export default function NoteForm({
               archived={archived}
               onChange={setArchived}
             />
-            {note && (
-              <NoteOptions
-                note={note}
-                onChangeType={setType}
-                onChangeLabels={setLabels}
-              />
+            <NoteOptions
+              note={note}
+              labels={labels}
+              type={type}
+              onChangeType={setType}
+              onChangeLabels={setLabels}
+            />
+            {!note && onSubmitButton && (
+              <Button
+                disabled={noContent}
+                onClick={onClickSubmitButton}
+                sx={{ ml: "auto" }}
+              >
+                Create
+              </Button>
             )}
           </Box>
         </NoteContainer>
