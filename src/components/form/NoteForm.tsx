@@ -3,8 +3,15 @@
 import { generateNoteId } from "@/rxdb";
 import { Note } from "@/rxdb/types/generated/note";
 import { NoteBackground, NoteContentItem, NoteType } from "@/rxdb/types/note";
-import { Box, Button, ClickAwayListener, Divider, Input } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import {
+  Box,
+  Button,
+  ClickAwayListener,
+  Input,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRxCollection } from "rxdb-hooks";
 import NoteBackgroundOptions from "@/components/input/NoteBackgroundOptions";
 import NoteContainer from "@/components/note/NoteContainer";
@@ -19,16 +26,16 @@ import { isRxDocument, RxDocument } from "rxdb";
 interface INoteFormProps {
   defaults?: Partial<Note> | RxDocument<Note>;
   defaultFocus?: boolean;
-  onSubmitButton?: () => void;
+  onSubmit?: () => void;
 }
 
 export default function NoteForm({
   defaults,
   defaultFocus = false,
-  onSubmitButton,
+  onSubmit,
 }: INoteFormProps) {
   const noteCollection = useRxCollection("notes");
-  const focus = useRef(defaultFocus);
+  const [focus, setFocus] = useState(defaultFocus);
   // Note data
   const [id] = useState(defaults?.id ?? generateNoteId());
   const [type, setType] = useState<NoteType>(defaults?.type ?? "simple");
@@ -54,24 +61,26 @@ export default function NoteForm({
 
   function onClickSubmitButton() {
     submitAction();
-    onSubmitButton!();
+    if (onSubmit) onSubmit();
   }
 
   function onClickAway() {
-    submitAction();
-    focus.current = false;
+    // Create new note if possible
+    if (!note) submitAction();
+    // Not focused
+    setFocus(false);
   }
 
   async function submitAction() {
-    if (!focus.current) return;
+    if (!focus) return;
 
     // Cannot have no title and no content
     if (noContent) {
       return;
     }
 
-    // Create or update note
-    await noteCollection?.incrementalUpsert({
+    // Create new note data
+    const noteData: Note = {
       id,
       type,
       title,
@@ -80,8 +89,41 @@ export default function NoteForm({
       labels,
       pinned,
       archived,
-    });
+    };
+
+    // Path or create note
+    if (note) {
+      await note.incrementalPatch(noteData);
+    } else {
+      await noteCollection?.insert(noteData);
+    }
   }
+
+  const { updatedAtString, createdAtString } = useMemo(() => {
+    const updatedAtDate = new Date(note?.updatedAt!);
+    const currentDateString = new Date().toLocaleDateString();
+    const updatedAtDateString = updatedAtDate.toLocaleDateString();
+    const createdAtString = new Date(note?.createdAt!).toLocaleDateString(
+      "default",
+      {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      }
+    );
+    const updatedAtString =
+      currentDateString === updatedAtDateString
+        ? updatedAtDate.toLocaleTimeString("default", {
+            hour: "numeric",
+            minute: "2-digit",
+          })
+        : updatedAtDate.toLocaleDateString("default", {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+          });
+    return { updatedAtString, createdAtString };
+  }, [note]);
 
   return (
     <ClickAwayListener onClickAway={onClickAway}>
@@ -89,7 +131,7 @@ export default function NoteForm({
         component="form"
         onSubmit={(e) => e.preventDefault()}
         onMouseDown={() => {
-          focus.current = true;
+          setFocus(true);
         }}
       >
         <NoteContainer background={background}>
@@ -115,13 +157,13 @@ export default function NoteForm({
 
           {type === "simple" ? (
             <NoteSimpleContent
-              autofocus={focus.current}
+              autofocus={focus}
               content={content}
               onChange={setContent}
             />
           ) : (
             <NoteTodoContent
-              autofocus={focus.current}
+              autofocus={focus}
               content={content}
               onChange={setContent}
             />
@@ -137,6 +179,7 @@ export default function NoteForm({
           <Box
             display="flex"
             flexWrap="wrap"
+            alignItems="center"
             gap={1}
             p={1}
           >
@@ -155,8 +198,23 @@ export default function NoteForm({
               onChangeType={setType}
               onChangeLabels={setLabels}
             />
-            {!note && onSubmitButton && (
+            {note ? (
+              focus && (
+                <Tooltip
+                  title={`Created ${createdAtString}`}
+                  disableInteractive
+                >
+                  <Typography
+                    variant="caption"
+                    sx={{ ml: "auto", mr: 2 }}
+                  >
+                    Edited {updatedAtString}
+                  </Typography>
+                </Tooltip>
+              )
+            ) : (
               <Button
+                color="inherit"
                 disabled={noContent}
                 onClick={onClickSubmitButton}
                 sx={{ ml: "auto" }}
