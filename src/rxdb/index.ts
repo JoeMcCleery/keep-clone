@@ -60,11 +60,18 @@ export default async function initRxDB() {
           oldNote.labels = [];
           return oldNote;
         },
+        2: function (oldNote) {
+          const isoDateTime = new Date().toISOString();
+          oldNote.createdAt = isoDateTime;
+          oldNote.updatedAt = isoDateTime;
+          return oldNote;
+        },
       },
     },
   });
 
   // Add middleware
+  // Labels middleware
   collections.labels.preRemove(function (label) {
     // When removing label, also remove it's id from notes
     return collections.notes
@@ -81,6 +88,16 @@ export default async function initRxDB() {
           });
         });
       });
+  }, false);
+
+  // Notes middleware
+  collections.notes.preInsert((data) => {
+    const isoDateTime = new Date().toISOString();
+    data.createdAt = isoDateTime;
+    data.updatedAt = isoDateTime;
+  }, false);
+  collections.notes.preSave((data) => {
+    data.updatedAt = new Date().toISOString();
   }, false);
 
   return db;

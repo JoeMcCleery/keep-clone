@@ -32,4 +32,6 @@ export interface Note {
   labels: string[];
   pinned: boolean;
   archived: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }

@@ -1,6 +1,6 @@
 {
   "title": "note",
-  "version": 1,
+  "version": 2,
   "description": "Describes a note",
   "primaryKey": "id",
   "type": "object",
@@ -63,6 +63,18 @@
     "archived": {
       "type": "boolean",
       "default": false
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "maxLength": 32,
+      "default": "",
+      "final": true
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "default": ""
     }
   },
   "additionalProperties": false,
@@ -75,5 +87,6 @@
     "labels",
     "pinned",
     "archived"
-  ]
+  ],
+  "indexes": ["createdAt"]
 }

@@ -8,6 +8,7 @@ export default function useNotes(
 ) {
   const { result, isFetching } = useRxData<Note>("notes", (collection) =>
     collection.find({
+      sort: [{ createdAt: "desc" }],
       selector: {
         archived,
         pinned,
