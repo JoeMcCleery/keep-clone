@@ -8,5 +8,10 @@ export default function useLabels() {
     })
   );
 
-  return { labels: result, isFetching };
+  let labels = result;
+  if (result.length > 0) {
+    labels = labels.sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  return { labels, isFetching };
 }
